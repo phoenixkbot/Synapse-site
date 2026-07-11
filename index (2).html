@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synapse — Le bot qui relie vos serveurs Discord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+	:root {
+		--bg: #0c0d16;
+		--bg-panel: #151729;
+		--bg-panel-soft: #11132078;
+		--border: #2a2d47;
+		--text: #f1f0f7;
+		--text-muted: #9497b3;
+		--violet: #8c7cff;
+		--teal: #52e3c2;
+		--coral: #ff8fa3;
+		--radius: 14px;
+	}
+
+	* { box-sizing: border-box; }
+
+	html { scroll-behavior: smooth; }
+
+	body {
+		margin: 0;
+		background: var(--bg);
+		color: var(--text);
+		font-family: 'IBM Plex Sans', sans-serif;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	h1, h2, h3 {
+		font-family: 'Space Grotesk', sans-serif;
+		font-weight: 700;
+		line-height: 1.1;
+		margin: 0;
+	}
+
+	.mono {
+		font-family: 'IBM Plex Mono', monospace;
+	}
+
+	a { color: inherit; }
+
+	:focus-visible {
+		outline: 2px solid var(--teal);
+		outline-offset: 3px;
+	}
+
+	.wrap {
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 0 32px;
+	}
+
+	/* --- Nav --- */
+	nav {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		backdrop-filter: blur(12px);
+		background: #0c0d16b0;
+		border-bottom: 1px solid var(--border);
+	}
+	nav .wrap {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 68px;
+	}
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: 'Space Grotesk', sans-serif;
+		font-weight: 700;
+		font-size: 1.15rem;
+		letter-spacing: -0.01em;
+	}
+	.brand-dot {
+		width: 10px; height: 10px;
+		border-radius: 50%;
+		background: var(--violet);
+		box-shadow: 0 0 12px 3px #8c7cffaa;
+	}
+	.nav-links {
+		display: flex;
+		gap: 28px;
+		font-size: 0.92rem;
+		color: var(--text-muted);
+	}
+	.nav-links a { text-decoration: none; transition: color .15s; }
+	.nav-links a:hover { color: var(--text); }
+
+	/* --- Hero --- */
+	.hero {
+		position: relative;
+		padding: 96px 0 72px;
+		overflow: hidden;
+	}
+	.hero .wrap {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: 40px;
+		align-items: center;
+	}
+	.eyebrow {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.78rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--teal);
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 18px;
+	}
+	.eyebrow::before {
+		content: '';
+		width: 6px; height: 6px;
+		border-radius: 50%;
+		background: var(--teal);
+		box-shadow: 0 0 8px 2px #52e3c2aa;
+	}
+	.hero h1 {
+		font-size: clamp(2.3rem, 4.4vw, 3.6rem);
+		letter-spacing: -0.02em;
+	}
+	.hero h1 span {
+		background: linear-gradient(100deg, var(--violet), var(--teal));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+	.hero p.lead {
+		margin-top: 20px;
+		font-size: 1.08rem;
+		color: var(--text-muted);
+		max-width: 46ch;
+	}
+	.cta-row {
+		display: flex;
+		gap: 14px;
+		margin-top: 34px;
+		flex-wrap: wrap;
+	}
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 9px;
+		padding: 13px 22px;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		border: 1px solid transparent;
+		transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+		cursor: pointer;
+	}
+	.btn:hover { transform: translateY(-2px); }
+	.btn-primary {
+		background: linear-gradient(100deg, var(--violet), #7166e8);
+		color: #0c0d16;
+		box-shadow: 0 8px 24px -8px #8c7cff66;
+	}
+	.btn-primary:hover { box-shadow: 0 10px 28px -6px #8c7cff88; }
+	.btn-ghost {
+		background: var(--bg-panel);
+		border-color: var(--border);
+		color: var(--text);
+	}
+	.btn-ghost:hover { border-color: var(--teal); }
+
+	.hero-note {
+		margin-top: 22px;
+		font-size: 0.82rem;
+		color: var(--text-muted);
+		font-family: 'IBM Plex Mono', monospace;
+	}
+
+	/* --- Neural diagram --- */
+	.diagram-wrap {
+		position: relative;
+	}
+	.diagram-wrap svg { width: 100%; height: auto; display: block; }
+	.node-label {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 10px;
+		fill: var(--text-muted);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pulse { animation: none !important; opacity: 0.6; }
+	}
+
+	/* --- Sections --- */
+	section { padding: 88px 0; }
+	.section-head { max-width: 62ch; margin-bottom: 52px; }
+	.section-head .eyebrow { color: var(--violet); }
+	.section-head .eyebrow::before { background: var(--violet); box-shadow: 0 0 8px 2px #8c7cffaa; }
+	.section-head h2 {
+		font-size: clamp(1.7rem, 3vw, 2.3rem);
+		letter-spacing: -0.015em;
+	}
+	.section-head p {
+		color: var(--text-muted);
+		margin-top: 14px;
+		font-size: 1rem;
+	}
+
+	/* Steps */
+	.steps {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+	}
+	.step {
+		background: var(--bg-panel);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 28px 24px;
+	}
+	.step .num {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.8rem;
+		color: var(--teal);
+		margin-bottom: 14px;
+		display: block;
+	}
+	.step h3 {
+		font-size: 1.08rem;
+		margin-bottom: 10px;
+	}
+	.step p {
+		color: var(--text-muted);
+		font-size: 0.93rem;
+		margin: 0;
+	}
+	.step code {
+		font-family: 'IBM Plex Mono', monospace;
+		background: #0c0d16;
+		border: 1px solid var(--border);
+		padding: 2px 7px;
+		border-radius: 6px;
+		font-size: 0.85em;
+		color: var(--teal);
+	}
+
+	/* Features */
+	.features {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+	.feature {
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 24px;
+		background: linear-gradient(160deg, var(--bg-panel-soft), transparent);
+		transition: border-color .15s;
+	}
+	.feature:hover { border-color: #3d4066; }
+	.feature .icon {
+		width: 34px; height: 34px;
+		border-radius: 9px;
+		display: flex; align-items: center; justify-content: center;
+		background: #1c1e34;
+		margin-bottom: 16px;
+		font-size: 1rem;
+	}
+	.feature h3 { font-size: 1rem; margin-bottom: 8px; }
+	.feature p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+
+	/* Get it */
+	.get-it {
+		background: var(--bg-panel);
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		padding: 48px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 40px;
+		align-items: center;
+	}
+	.get-it h2 { font-size: 1.7rem; margin-bottom: 14px; }
+	.get-it p { color: var(--text-muted); font-size: 0.95rem; }
+	.code-block {
+		background: #0a0b12;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 22px;
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.85rem;
+		color: #c9cbe0;
+		overflow-x: auto;
+	}
+	.code-block .c1 { color: var(--teal); }
+	.code-block .c2 { color: var(--text-muted); }
+
+	/* Donate */
+	.donate {
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		padding: 48px;
+		text-align: center;
+		background: radial-gradient(circle at 50% 0%, #ff8fa314, transparent 60%), var(--bg-panel);
+	}
+	.donate h2 { font-size: 1.6rem; margin-bottom: 14px; }
+	.donate p { color: var(--text-muted); max-width: 52ch; margin: 0 auto 28px; }
+	.btn-coral {
+		background: linear-gradient(100deg, var(--coral), #ff6f8d);
+		color: #1a0d10;
+	}
+
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 32px 0;
+		color: var(--text-muted);
+		font-size: 0.85rem;
+	}
+	footer .wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	@media (max-width: 860px) {
+		.hero .wrap { grid-template-columns: 1fr; }
+		.diagram-wrap { order: -1; }
+		.steps, .features { grid-template-columns: 1fr; }
+		.get-it { grid-template-columns: 1fr; padding: 32px; }
+		.nav-links { display: none; }
+		section { padding: 64px 0; }
+	}
+</style>
+</head>
+<body>
+
+<nav>
+	<div class="wrap">
+		<div class="brand"><span class="brand-dot"></span>Synapse</div>
+		<div class="nav-links">
+			<a href="#fonctionnement">Fonctionnement</a>
+			<a href="#fonctionnalites">Fonctionnalités</a>
+			<a href="#inviter">Inviter</a>
+			<a href="#don">Soutenir</a>
+		</div>
+	</div>
+</nav>
+
+<section class="hero">
+	<div class="wrap">
+		<div>
+			<div class="eyebrow">Bot Discord open source</div>
+			<h1>Deux serveurs.<br><span>Une seule conversation.</span></h1>
+			<p class="lead">Synapse relie des salons entre serveurs Discord différents et relaie les messages comme des impulsions le long d'un neurone — avec le vrai pseudo, le vrai avatar, et une petite signature discrète pour savoir d'où ça vient.</p>
+			<div class="cta-row">
+				<a class="btn btn-primary" href="https://discord.com/api/oauth2/authorize?client_id=928717186393079839&permissions=536988672&scope=bot%20applications.commands">+ Ajouter à Discord</a>
+				<a class="btn btn-ghost" href="#fonctionnement">Voir comment ça marche</a>
+			</div>
+			<div class="hero-note">gratuit · open source · fr / en</div>
+		</div>
+
+		<div class="diagram-wrap" aria-hidden="true">
+			<svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+						<feGaussianBlur stdDeviation="5" result="blur"/>
+						<feMerge>
+							<feMergeNode in="blur"/>
+							<feMergeNode in="SourceGraphic"/>
+						</feMerge>
+					</filter>
+					<linearGradient id="bridge" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%" stop-color="#8c7cff"/>
+						<stop offset="100%" stop-color="#52e3c2"/>
+					</linearGradient>
+				</defs>
+
+				<!-- Liens internes faibles (salons d'un même serveur) -->
+				<g stroke="#2a2d47" stroke-width="1.5" fill="none">
+					<path d="M90,140 L65,235"/>
+					<path d="M65,235 L125,310"/>
+					<path d="M90,140 L125,310"/>
+					<path d="M510,140 L535,235"/>
+					<path d="M535,235 L480,310"/>
+					<path d="M510,140 L480,310"/>
+				</g>
+
+				<!-- Le pont : la liaison Synapse entre les deux serveurs -->
+				<path id="bridgePath" d="M65,235 C220,120 380,120 535,235" stroke="url(#bridge)" stroke-width="2" fill="none" opacity="0.55"/>
+
+				<!-- Noeuds serveur A -->
+				<g filter="url(#glow)">
+					<circle cx="90" cy="140" r="6" fill="#8c7cff"/>
+					<circle cx="65" cy="235" r="8" fill="#8c7cff"/>
+					<circle cx="125" cy="310" r="6" fill="#8c7cff"/>
+				</g>
+				<!-- Noeuds serveur B -->
+				<g filter="url(#glow)">
+					<circle cx="510" cy="140" r="6" fill="#52e3c2"/>
+					<circle cx="535" cy="235" r="8" fill="#52e3c2"/>
+					<circle cx="480" cy="310" r="6" fill="#52e3c2"/>
+				</g>
+
+				<text x="40" y="365" class="node-label">SERVEUR A</text>
+				<text x="470" y="365" class="node-label">SERVEUR B</text>
+
+				<!-- Impulsions voyageant le long du pont -->
+				<circle r="4.5" fill="#fff" class="pulse">
+					<animateMotion dur="2.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+						<mpath href="#bridgePath"/>
+					</animateMotion>
+					<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.8s" repeatCount="indefinite"/>
+				</circle>
+				<circle r="3.5" fill="#52e3c2" class="pulse">
+					<animateMotion dur="2.8s" begin="1.4s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+						<mpath href="#bridgePath"/>
+					</animateMotion>
+					<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" begin="1.4s" dur="2.8s" repeatCount="indefinite"/>
+				</circle>
+			</svg>
+		</div>
+	</div>
+</section>
+
+<section id="fonctionnement">
+	<div class="wrap">
+		<div class="section-head">
+			<div class="eyebrow">Fonctionnement</div>
+			<h2>Trois étapes, aucune friction</h2>
+			<p>Synapse s'installe sur ton propre serveur (Railway, VPS, peu importe) avec ton propre bot Discord. Ensuite, tout se passe en commandes slash.</p>
+		</div>
+		<div class="steps">
+			<div class="step">
+				<span class="num">01</span>
+				<h3>Lier deux salons</h3>
+				<p>Sur le même serveur avec <code>/link_channel</code>, ou entre deux serveurs différents grâce à un code de synchronisation généré par <code>/generate_sync_code</code>.</p>
+			</div>
+			<div class="step">
+				<span class="num">02</span>
+				<h3>Les messages se relaient</h3>
+				<p>Chaque message envoyé dans un salon lié apparaît dans les autres, avec le pseudo et l'avatar de la personne, suivi d'une signature discrète indiquant le salon et le serveur d'origine.</p>
+			</div>
+			<div class="step">
+				<span class="num">03</span>
+				<h3>Cibler un serveur précis</h3>
+				<p>Plusieurs serveurs reliés au même salon ? Tape <code>@alias ton message</code> pour n'en viser qu'un seul, au lieu de diffuser partout.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="fonctionnalites">
+	<div class="wrap">
+		<div class="section-head">
+			<div class="eyebrow">Fonctionnalités</div>
+			<h2>Ce que Synapse gère pour toi</h2>
+		</div>
+		<div class="features">
+			<div class="feature">
+				<div class="icon">🔗</div>
+				<h3>Liaisons entre serveurs</h3>
+				<p>Relie des salons de serveurs Discord totalement différents via un simple code temporaire.</p>
+			</div>
+			<div class="feature">
+				<div class="icon">🏷️</div>
+				<h3>Alias personnalisables</h3>
+				<p>Renomme chaque salon lié comme tu veux pour t'y retrouver, plutôt que de subir un nom généré automatiquement.</p>
+			</div>
+			<div class="feature">
+				<div class="icon">🪪</div>
+				<h3>Identité conservée</h3>
+				<p>Les messages relayés gardent le vrai pseudo et l'avatar du serveur d'origine, via des webhooks natifs.</p>
+			</div>
+			<div class="feature">
+				<div class="icon">🌐</div>
+				<h3>Français / English</h3>
+				<p>Chaque serveur choisit sa langue pour les réponses du bot avec <code class="mono">/set_language</code>.</p>
+			</div>
+			<div class="feature">
+				<div class="icon">💾</div>
+				<h3>Tout est sauvegardé</h3>
+				<p>Liaisons, alias et préférences survivent aux redémarrages grâce à une persistance sur disque.</p>
+			</div>
+			<div class="feature">
+				<div class="icon">🔒</div>
+				<h3>Contrôle total</h3>
+				<p>Seul le propriétaire du bot peut créer ou modifier une liaison. Personne d'autre n'y touche.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="inviter">
+	<div class="wrap">
+		<div class="get-it">
+			<div>
+				<h2>Ajoute Synapse en un clic</h2>
+				<p>Pas besoin d'héberger quoi que ce soit : Synapse tourne déjà, il suffit de l'ajouter à ton serveur. Seuls les membres avec les droits d'administration peuvent l'y inviter.</p>
+				<div class="cta-row" style="margin-top:24px;">
+					<a class="btn btn-primary" href="https://discord.com/api/oauth2/authorize?client_id=928717186393079839&permissions=536988672&scope=bot%20applications.commands">Ajouter à mon serveur</a>
+				</div>
+			</div>
+			<div class="code-block">
+<span class="c2"># permissions demandées à l'invitation</span><br>
+<span class="c1">✓</span> Voir les salons<br>
+<span class="c1">✓</span> Envoyer des messages<br>
+<span class="c1">✓</span> Intégrer des liens (embeds)<br>
+<span class="c1">✓</span> Joindre des fichiers<br>
+<span class="c1">✓</span> Lire l'historique des messages<br>
+<span class="c1">✓</span> Gérer les webhooks <span class="c2">— pour relayer avec le vrai pseudo</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="don">
+	<div class="wrap">
+		<div class="donate">
+			<h2>Un coup de main pour le garder en vie</h2>
+			<p>Synapse est développé et hébergé sur mon temps libre. Si le bot te rend service, un petit don aide à couvrir l'hébergement — sans jamais rien débloquer en plus, tout reste gratuit pour tout le monde.</p>
+			<a class="btn btn-coral" href="https://ko-fi.com/synapsebot">💛 Soutenir sur Ko-fi</a>
+		</div>
+	</div>
+</section>
+
+<footer>
+	<div class="wrap">
+		<div>Synapse — bot interserveur, en développement continu.</div>
+		<div><a href="https://github.com/phoenixkbot/Synapse/tree/main">github.com/phoenixkbot/Synapse</a></div>
+	</div>
+</footer>
+
+</body>
+</html>
