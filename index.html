@@ -332,6 +332,13 @@
 		flex-wrap: wrap;
 		gap: 12px;
 	}
+	footer a {
+		text-decoration: none;
+		transition: color .15s;
+	}
+	footer a:hover {
+		color: var(--text);
+	}
 
 	@media (max-width: 860px) {
 		.hero .wrap { grid-template-columns: 1fr; }
@@ -537,7 +544,11 @@
 <footer>
 	<div class="wrap">
 		<div>Synapse — bot interserveur, en développement continu.</div>
-		<div><a href="#inviter">Ajouter à mon serveur</a></div>
+		<div style="display:flex; gap:20px;">
+			<a href="privacy.html">Confidentialité</a>
+			<a href="terms.html">Conditions</a>
+			<a href="#inviter">Ajouter à mon serveur</a>
+		</div>
 	</div>
 </footer>
 
