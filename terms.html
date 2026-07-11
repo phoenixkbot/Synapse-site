@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditions d'utilisation — Synapse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+	:root {
+		--bg: #0c0d16;
+		--bg-panel: #151729;
+		--border: #2a2d47;
+		--text: #f1f0f7;
+		--text-muted: #9497b3;
+		--violet: #8c7cff;
+		--teal: #52e3c2;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--bg);
+		color: var(--text);
+		font-family: 'IBM Plex Sans', sans-serif;
+		line-height: 1.7;
+		-webkit-font-smoothing: antialiased;
+	}
+	.wrap { max-width: 760px; margin: 0 auto; padding: 0 32px; }
+	nav {
+		position: sticky; top: 0; z-index: 20;
+		backdrop-filter: blur(12px);
+		background: #0c0d16b0;
+		border-bottom: 1px solid var(--border);
+	}
+	nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+	.brand { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--text); }
+	.brand-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 12px 3px #8c7cffaa; }
+	.back { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+	.back:hover { color: var(--text); }
+	main { padding: 64px 0 96px; }
+	h1 {
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: clamp(1.9rem, 4vw, 2.5rem);
+		margin: 0 0 8px;
+		letter-spacing: -0.01em;
+	}
+	.updated {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.8rem;
+		color: var(--teal);
+		margin-bottom: 40px;
+		display: block;
+	}
+	h2 {
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: 1.25rem;
+		margin: 40px 0 12px;
+		letter-spacing: -0.01em;
+	}
+	p, li { color: var(--text-muted); font-size: 0.98rem; }
+	ul { padding-left: 20px; }
+	li { margin-bottom: 8px; }
+	strong { color: var(--text); }
+	code {
+		font-family: 'IBM Plex Mono', monospace;
+		background: var(--bg-panel);
+		border: 1px solid var(--border);
+		padding: 2px 7px;
+		border-radius: 6px;
+		font-size: 0.85em;
+		color: var(--teal);
+	}
+	.note {
+		background: var(--bg-panel);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 18px 22px;
+		margin: 32px 0;
+		font-size: 0.9rem;
+	}
+	a.inline { color: var(--teal); }
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 32px 0;
+		color: var(--text-muted);
+		font-size: 0.85rem;
+	}
+</style>
+</head>
+<body>
+
+<nav>
+	<div class="wrap">
+		<a class="brand" href="index.html"><span class="brand-dot"></span>Synapse</a>
+		<a class="back" href="index.html">← Retour au site</a>
+	</div>
+</nav>
+
+<main class="wrap">
+	<h1>Conditions d'utilisation</h1>
+	<span class="updated">Dernière mise à jour : juillet 2026</span>
+
+	<p>En ajoutant Synapse à ton serveur Discord ou en utilisant ses commandes, tu acceptes les conditions ci-dessous. Synapse est un projet personnel et gratuit, pas un produit commercial avec une équipe support dédiée.</p>
+
+	<h2>Ce que fait Synapse</h2>
+	<p>Synapse relie des salons Discord entre serveurs (ou au sein d'un même serveur) et relaie les messages envoyés dans ces salons vers les salons liés, en conservant le pseudo et l'avatar de l'auteur d'origine.</p>
+
+	<h2>Utilisation autorisée</h2>
+	<ul>
+		<li>Le bot doit être utilisé dans le respect des <a class="inline" href="https://discord.com/guidelines">règles de la communauté Discord</a> et des <a class="inline" href="https://discord.com/terms">conditions d'utilisation de Discord</a>.</li>
+		<li>Les administrateurs qui créent une liaison entre salons sont responsables d'en informer leur communauté : les messages envoyés dans un salon lié sont visibles sur un ou plusieurs autres serveurs.</li>
+		<li>Toute utilisation du bot pour du spam, du harcèlement, la diffusion de contenu illégal, ou pour contourner une modération est strictement interdite.</li>
+	</ul>
+
+	<h2>Aucune garantie de disponibilité</h2>
+	<p>Synapse est un projet géré sur le temps libre du développeur. Il n'y a <strong>aucune garantie de disponibilité continue</strong>, de temps de réponse, ni d'absence de bug. Le bot est fourni "tel quel", sans garantie d'aucune sorte.</p>
+
+	<h2>Suspension ou retrait</h2>
+	<p>Le développeur se réserve le droit de suspendre l'accès au bot pour un serveur ou un utilisateur en cas d'utilisation abusive, sans préavis, en particulier en cas de non-respect des règles de Discord ou des présentes conditions.</p>
+
+	<div class="note">
+		Tu peux retirer le bot de ton serveur à tout moment via <strong>Paramètres du serveur → Intégrations</strong>, ce qui supprime immédiatement toutes les liaisons associées à ce serveur.
+	</div>
+
+	<h2>Modifications</h2>
+	<p>Ces conditions peuvent évoluer avec l'ajout de nouvelles fonctionnalités. La date en haut de cette page reflète la dernière mise à jour. L'utilisation continue du bot après une modification vaut acceptation des nouvelles conditions.</p>
+
+	<h2>Contact</h2>
+	<p>Pour toute question, contacte le développeur via le serveur de support Discord lié à l'app, ou via <a class="inline" href="https://ko-fi.com/synapsebot">Ko-fi</a>.</p>
+
+	<p>Voir aussi notre <a class="inline" href="privacy.html">politique de confidentialité</a>.</p>
+</main>
+
+<footer>
+	<div class="wrap">Synapse — bot interserveur.</div>
+</footer>
+
+</body>
+</html>
